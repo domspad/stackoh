@@ -21,7 +21,9 @@
             </div>
 
             <div class="row">
-                <div id="plot" class="col-md-8 col-md-offset-2"></div>
+                <div class="col-md-8 col-md-offset-2">
+                    <div id="plot"></div>
+                </div>
             </div>
         </div>
 
@@ -29,5 +31,35 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <script>
+        var socket = io();
+
+        $("#submit").click(function()
+        {
+            var tags = $("input[name='tags']").val();
+            console.log("Sending tags: " + tags);
+            socket.emit("tags_request", tags);
+        });
+
+        socket.on("tags_data", function(data)
+        {
+            console.log(data);
+
+            var x = Object.keys(data);
+            var y = Array();
+            for (var i in data)
+            {
+                y.push(data[i]);
+            }
+
+            plot_data = [ {
+                x: x,
+                y: y,
+                type: 'bar'
+            } ];
+
+            Plotly.newPlot("plot", plot_data);
+        });
+        </script>
     </body>
 </html>
