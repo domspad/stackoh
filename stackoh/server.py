@@ -1,6 +1,8 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
 
+from data_utils import get_tag_info
+
 app = Flask(__name__)
 socketio = SocketIO(app)
 
@@ -10,11 +12,13 @@ def hello():
 
 @socketio.on("tags_request")
 def tags_request(message):
-    print "Received tags_request: ", message
+    print "Received tags_request:", message
 
-    # Call into SO API
+    tags = [s.strip() for s in message.split(",")]
+
     data = dict()
-    data["test_tag"] = 1234
+    for t in tags:
+        data[t] = get_tag_info(t)
 
     socketio.emit("tags_data", data)
 
