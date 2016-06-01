@@ -34,13 +34,6 @@
         <script>
         var socket = io();
 
-        $("#submit").click(function()
-        {
-            var tags = $("input[name='tags']").val();
-            console.log("Sending tags: " + tags);
-            socket.emit("tags_request", tags);
-        });
-
         socket.on("tags_data", function(data)
         {
             console.log(data);
@@ -60,6 +53,14 @@
 
             Plotly.newPlot("plot", plot_data);
         });
+
+        $("#submit").click(function()
+        {
+            var tags = $("input[name='tags']").val();
+            console.log("Sending tags: " + tags);
+            socket.emit("tags_request", tags);
+        });
+
         </script>
     </body>
 </html>
