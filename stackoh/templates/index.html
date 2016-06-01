@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    </head>
+
+    <body>
+        <div class="jumbotron">
+            <div class="container">
+                <h1>StackOh <small>Ohhhhh yeaaahhh</small></h1>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <input type="text" name="tags" placeholder="Tags" class="input-lg form-control">
+                        <span class="input-group-btn"><button id="submit" class="btn btn-primary btn-lg">Submit</button></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div id="plot"></div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <script>
+        var socket = io();
+
+        socket.on("tags_data", function(data)
+        {
+            console.log(data);
+
+            var x = Object.keys(data);
+            var y = Array();
+            for (var i in data)
+            {
+                y.push(data[i]);
+            }
+
+            plot_data = [ {
+                x: x,
+                y: y,
+                type: 'bar'
+            } ];
+
+            Plotly.newPlot("plot", plot_data);
+        });
+
+        $("#submit").click(function()
+        {
+            var tags = $("input[name='tags']").val();
+            console.log("Sending tags: " + tags);
+            socket.emit("tags_request", tags);
+        });
+
+        </script>
+    </body>
+</html>
