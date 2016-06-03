@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 
-from data_utils import get_tag_info
+from data_utils import tag_question_count
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -30,7 +30,7 @@ def tags_request(message):
     if len(tags) > 0:
         data = dict()
         for t in tags:
-            data[t] = get_tag_info(t)
+            data[t] = tag_question_count(t)
 
         socketio.emit("tags_data", data, room=request.sid)
 
