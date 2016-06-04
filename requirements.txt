@@ -1,2 +1,3 @@
 Flask==0.11
 Flask-SocketIO==2.4
+requests==2.3.0
