@@ -54,6 +54,11 @@
             Plotly.newPlot("plot", plot_data);
         });
 
+        socket.on("so_update", function(data)
+        {
+            console.log(data)
+        })
+
         $("#submit").click(function()
         {
             var tags = $("input[name='tags']").val();
