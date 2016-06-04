@@ -32,7 +32,31 @@
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script>
-        var socket = io();
+        var socket = io('http://' + document.domain + ':' + location.port);
+
+        var so_socket = new WebSocket("ws://qa.sockets.stackexchange.com/");
+        var counts = Object();
+
+        so_socket.onopen = function()
+        {
+            so_socket.send("155-questions-active");
+        };
+        so_socket.onmessage = function(raw_data)
+        {
+            // get community from data
+            var data = JSON.parse(JSON.parse(raw_data["data"])["data"]);
+            var community = data["apiSiteParameter"];
+            if (community in counts)
+            {
+                counts[community] += 1;
+            }
+            else
+            {
+                counts[community] = 1;
+            }
+            console.log(counts);
+            // Redraw graph
+        };
 
         socket.on("tags_data", function(data)
         {

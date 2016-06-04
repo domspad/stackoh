@@ -37,4 +37,4 @@ def tags_request(message):
 if __name__ == "__main__":
     import os
 
-    socketio.run(app, host=os.environ['IP'], port=int(os.environ['PORT']), debug=True)
+    socketio.run(app, host=os.environ['IP'], port=int(os.environ['PORT']))
