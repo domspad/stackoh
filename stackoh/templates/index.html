@@ -7,7 +7,7 @@
     <body>
         <div class="jumbotron">
             <div class="container">
-                <h1>StackOh <small>Ohhhhh yeaaahhh</small></h1>
+                <h1>StackOhYeaaaaa</h1>
             </div>
         </div>
         <div class="container">
@@ -22,6 +22,13 @@
 
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
+                    <h1>Live Global Update
+                    <div id="global-plot"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <h1>Local Inquiry</h1>
                     <div id="plot"></div>
                 </div>
             </div>
@@ -32,7 +39,50 @@
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script>
-        var socket = io();
+        var socket = io('http://' + document.domain + ':' + location.port);
+
+        // connect to StackExchange sockets
+        var so_socket = new WebSocket("ws://qa.sockets.stackexchange.com/");
+        var counts = Object();
+
+        // to begin feed we notify that we are looking for all active questions from all communities
+        // the "API" (no official one exists) can be found here
+        // http://meta.stackexchange.com/questions/218343/how-do-the-stack-exchange-websockets-work-what-are-all-the-options-you-can-send
+        so_socket.onopen = function()
+        {
+            so_socket.send("155-questions-active");
+        };
+        so_socket.onmessage = function(raw_data)
+        {
+            // get community from data
+            var data = JSON.parse(JSON.parse(raw_data["data"])["data"]);
+            var community = data["apiSiteParameter"];
+            if (community in counts)
+            {
+                counts[community] += 1;
+            }
+            else
+            {
+                counts[community] = 1;
+            }
+            console.log(counts);
+            // Redraw graph
+
+            var x = Object.keys(counts);
+            var y = Array();
+            for (var i in counts)
+            {
+                y.push(counts[i]);
+            }
+
+            plot_data = [ {
+                x: x,
+                y: y,
+                type: 'bar'
+            } ];
+
+            Plotly.newPlot("global-plot", plot_data);
+        };
 
         socket.on("tags_data", function(data)
         {
