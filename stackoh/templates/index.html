@@ -22,6 +22,13 @@
 
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
+                    <h1>Live Global Update
+                    <div id="global-plot"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <h1>Local Inquiry</h1>
                     <div id="plot"></div>
                 </div>
             </div>
@@ -56,6 +63,21 @@
             }
             console.log(counts);
             // Redraw graph
+
+            var x = Object.keys(counts);
+            var y = Array();
+            for (var i in counts)
+            {
+                y.push(counts[i]);
+            }
+
+            plot_data = [ {
+                x: x,
+                y: y,
+                type: 'bar'
+            } ];
+
+            Plotly.newPlot("global-plot", plot_data);
         };
 
         socket.on("tags_data", function(data)
