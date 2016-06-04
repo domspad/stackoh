@@ -7,7 +7,7 @@
     <body>
         <div class="jumbotron">
             <div class="container">
-                <h1>StackOh <small>Ohhhhh yeaaahhh</small></h1>
+                <h1>StackOhYeaaaaa</h1>
             </div>
         </div>
         <div class="container">
@@ -41,9 +41,13 @@
         <script>
         var socket = io('http://' + document.domain + ':' + location.port);
 
+        // connect to StackExchange sockets
         var so_socket = new WebSocket("ws://qa.sockets.stackexchange.com/");
         var counts = Object();
 
+        // to begin feed we notify that we are looking for all active questions from all communities
+        // the "API" (no official one exists) can be found here
+        // http://meta.stackexchange.com/questions/218343/how-do-the-stack-exchange-websockets-work-what-are-all-the-options-you-can-send
         so_socket.onopen = function()
         {
             so_socket.send("155-questions-active");
