@@ -1,1 +1,1 @@
-web: python stackoh/server.py
+web: gunicorn server:app --log-file -
