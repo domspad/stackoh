@@ -1,1 +1,1 @@
-web: gunicorn server:app --log-file -
+web: gunicorn stackoh.server:app --log-file -
